@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>werstack.com</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .screen-white {
+      background-color: #f8f9fa;
+      z-index: 10;
+    }
+
+    .screen-dark {
+      background-color: #1a1d21;
+      z-index: 20;
+      position: relative;
+    }
+
+    .coming-soon {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #ff6b3d;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .dot-animation {
+      display: inline-flex;
+      min-width: 1.2em;
+    }
+
+    .dot {
+      opacity: 0;
+      animation: dotBlink 1.5s infinite;
+    }
+
+    .dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .dot:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+    .dot:nth-child(3) {
+      animation-delay: 1s;
+    }
+
+    @keyframes dotBlink {
+      0%, 60% {
+        opacity: 0;
+      }
+      30% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .dark-content {
+      position: absolute;
+      top: 30%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .werstack-title {
+      font-size: clamp(6.5rem, 12vw, 20rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #ff6b3d;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1;
+      margin-bottom: 0;
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .werstack-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .description-wrapper {
+      position: absolute;
+      top: 140%;
+      right: 15%;
+      max-width: 530px;
+      width: 45%;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .description-wrapper.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .description-text {
+      color: #f9fafb;
+      font-size: clamp(0.875rem, 1.8vw, 1rem);
+      line-height: 1.7;
+      font-weight: 400;
+      margin: 0;
+      font-family: 'SF Mono', 'Menlo', 'Monaco', 'Cascadia Code', 'Fira Code', monospace;
+      letter-spacing: -0.01em;
+    }
+
+    @media (max-width: 1024px) {
+      .description-wrapper {
+        max-width: 450px;
+        top: 130%;
+        right: 5%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dark-content {
+        position: relative;
+        top: auto;
+        transform: none;
+        padding: 0 1rem;
+        margin-top: auto;
+        margin-bottom: auto;
+        min-height: 100vh;
+        justify-content: center;
+      }
+      
+      .werstack-title {
+        white-space: nowrap;
+        margin-bottom: 2rem;
+      }
+      
+      .description-wrapper {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        right: auto;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: left;
+      }
+      
+      .description-text {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .werstack-title {
+        white-space: nowrap;
+        font-size: clamp(3rem, 16vw, 6.5rem);
+        margin-bottom: 1.5rem;
+      }
+      
+      .description-wrapper {
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .werstack-title {
+        font-size: clamp(2.8rem, 16vw, 4.5rem);
+        margin-bottom: 1.2rem;
+      }
+      
+      .description-wrapper {
+        width: 90%;
+      }
+      
+      .description-text {
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="screen screen-white" id="screen1">
+    <div class="coming-soon" id="comingSoonText">
+      СКОРО<span class="dot-animation">
+        <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="screen screen-dark" id="screen2">
+    <div class="dark-content">
+      <div class="werstack-title" id="werstackTitle">WERSTACK</div>
+      <div class="description-wrapper" id="descriptionContainer">
+        <p class="description-text" id="descriptionText">
+          Онлайн-инструмент для управления и хранения изображений. С его помощью можно не только загружать фотографии и организовывать их в папки, но и редактировать прямо через браузер, сотрудничать с коллегами, оставлять комментарии и передавать ссылки на контент.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const browserLang = navigator.language || navigator.userLanguage;
+      const isRussian = browserLang.toLowerCase().startsWith('ru');
+      
+      const firstScreenTexts = {
+        ru: 'СКОРО',
+        en: 'COMING SOON'
+      };
+      
+      const texts = {
+        ru: {
+          description: 'Онлайн-инструмент для управления и хранения изображений.  С его помощью можно не только загружать фотографии и организовывать их в папки, но и редактировать прямо через браузер, сотрудничать с коллегами, оставлять комментарии и передавать ссылки на контент.'
+        },
+        en: {
+          description: 'An online tool for managing and storing images. With it, you can not only upload photos and organize them into folders, but also edit directly in the browser, collaborate with colleagues, leave comments, and share links to content.'
+        }
+      };
+      
+      const comingSoonElement = document.getElementById('comingSoonText');
+      if (comingSoonElement) {
+        const firstText = isRussian ? firstScreenTexts.ru : firstScreenTexts.en;
+        const dotsSpan = comingSoonElement.querySelector('.dot-animation');
+        comingSoonElement.innerHTML = '';
+        comingSoonElement.appendChild(document.createTextNode(firstText));
+        if (dotsSpan) {
+          comingSoonElement.appendChild(dotsSpan);
+        }
+      }
+      
+      const descriptionText = document.getElementById('descriptionText');
+      if (descriptionText) {
+        descriptionText.textContent = isRussian ? texts.ru.description : texts.en.description;
+      }
+      
+      const screen1 = document.getElementById('screen1');
+      const screen2 = document.getElementById('screen2');
+      const titleElement = document.getElementById('werstackTitle');
+      const descriptionWrapper = document.getElementById('descriptionContainer');
+      
+      function switchToSecondScreen() {
+        if (screen1 && screen2) {
+          screen1.classList.remove('active');
+          setTimeout(() => {
+            screen2.classList.add('active');
+            
+            if (titleElement) {
+              titleElement.classList.add('visible');
+            }
+            
+            setTimeout(() => {
+              if (descriptionWrapper) {
+                descriptionWrapper.classList.add('visible');
+              }
+            }, 200);
+            
+          }, 50);
+        }
+      }
+      
+      setTimeout(() => {
+        if (screen1) {
+          screen1.classList.add('active');
+        }
+      }, 50);
+      
+      setTimeout(() => {
+        switchToSecondScreen();
+      }, 5000);
+    })();
+  </script>
+</body>
+</html>
